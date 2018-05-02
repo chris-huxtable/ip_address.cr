@@ -19,8 +19,7 @@ dependencies:
 ## Usage
 
 ```crystal
-require "ip/address.cr"
-require "ip/block.cr"
+require "ip_address"
 ```
 
 Some samples:
@@ -48,6 +47,7 @@ Some samples:
 3. Commit your changes (git commit -am 'Add some feature')
 4. Push to the branch (git push origin my-new-feature)
 5. Create a new Pull Request
+
 
 ## Contributors
 
