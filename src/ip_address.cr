@@ -1,2 +1,2 @@
-require "ip/address"
-require "ip/block"
+require "./ip/address"
+require "./ip/block"
