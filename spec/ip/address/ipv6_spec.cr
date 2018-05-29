@@ -12,6 +12,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+
 private def address_should_eq(string : String, equals : String = string, file = __FILE__, line = __LINE__) : Nil
 	IP::Address::IPv6[string].to_s.should eq(equals)
 end
