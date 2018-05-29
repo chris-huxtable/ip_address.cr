@@ -18,6 +18,10 @@ require "../../lib_c/arpa/inet"
 
 struct IP::Address::IPv6 < IP::Address
 
+	alias Value = UInt128
+	alias Hextet = UInt16
+	alias Hextets = Tuple(Hextet, Hextet, Hextet, Hextet, Hextet, Hextet, Hextet, Hextet)
+
 	ADDRESS_MAX = 0xFFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_u128
 	ADDRESS_WIDTH = 128_u8
 
@@ -28,8 +32,8 @@ struct IP::Address::IPv6 < IP::Address
 		Agressive
 	end
 
-	# Creates a new `IP::Address::IPv6` from a `UInt128` value.
-	def initialize(@value : UInt128)
+	# Creates a new `IP::Address::IPv6` from a `{{ Value.id }}` value.
+	def initialize(@value : Value)
 	end
 
 	# Constructs a new `IP::Address::IPv6` from the contents of a `String`. Expects an
@@ -48,16 +52,16 @@ struct IP::Address::IPv6 < IP::Address
 	# Returns `nil` when the input is malformed.
 	#
 	def self.new?(string : String) : self?
-		groups = Parser.groups(string)
-		return nil if ( !groups )
-		return new(groups)
+		hextets = Parser.hextets(string)
+		return nil if ( !hextets )
+		return new(hextets)
 	end
 
 	# Constructs a new `IP::Address::IPv6` from a `Tuple` of 8 `UInt16`.
-	def self.new(groups : Tuple(UInt16, UInt16, UInt16, UInt16, UInt16, UInt16, UInt16, UInt16))
+	def self.new(hextets : Hextets)
 		offset = (7 * 16).to_u128
 		value = 0_u128
-		groups.each() { |group|
+		hextets.each() { |group|
 			value  += (group.to_u128 << offset )
 			offset -= 16
 		}
@@ -76,13 +80,13 @@ struct IP::Address::IPv6 < IP::Address
 
 	# Constructs a new `IP::Address::IPv6` from an `Int`.
 	def self.new(value : Int) : self
-		raise OutOfBoundsError.new("Value #{value} out of range. Too high.") if ( value > ADDRESS_MAX )
-		raise OutOfBoundsError.new("Value #{value} out of range. Too low.")  if ( value < 0 )
+		raise OutOfBoundsError.new("Value #{value} out of bounds. Too high.") if ( value > ADDRESS_MAX )
+		raise OutOfBoundsError.new("Value #{value} out of bounds. Too low.")  if ( value < 0 )
 		return new(value.to_u128)
 	end
 
 	# The internally stored value of the address.
-	getter value : UInt128
+	getter value : Value
 
 	# The internally stored value of the address in network byte order.
 	def value_network() : StaticArray(LibC::UInt16T, 8)
@@ -97,13 +101,8 @@ struct IP::Address::IPv6 < IP::Address
 	end
 
 	# The maximum address of this type.
-	def max_address() : UInt128
+	def max_value() : Value
 		return ADDRESS_MAX
-	end
-
-	# Informs if the address is IPv6 or not.
-	def ipv6?() : Bool
-		return true
 	end
 
 	# Informs if the address is in the loopback address space or not.
@@ -114,8 +113,9 @@ struct IP::Address::IPv6 < IP::Address
 	# Returns the requested group from the address.
 	#
 	# Raises `OutOfBoundsError` if the requested group is not [0..7].
-	def [](index : Int) : UInt16
-		raise OutOfBoundsError.new("Index #{index} is out of bounds.") if ( index > 7 || index < 0)
+	def [](index : Int) : Hextet
+		raise OutOfBoundsError.new("Index #{index} out of bounds. Too high.") if ( index > 7 )
+		raise OutOfBoundsError.new("Index #{index} out of bounds. Too low.")  if ( index < 0 )
 
 		shift = ((7 - index) * 16).to_u128
 		value = ((0xFFFF_u128 << shift) & @value) >> shift
@@ -123,7 +123,7 @@ struct IP::Address::IPv6 < IP::Address
 	end
 
 	# Returns a `Tuple` of 8 `UInt16` which represent the addresses octets.
-	def groups() : Tuple(UInt16, UInt16, UInt16, UInt16, UInt16, UInt16, UInt16, UInt16)
+	def hextets() : Hextets
 		return { self[0], self[1], self[2], self[3], self[4], self[5], self[6], self[7] }
 	end
 
@@ -147,7 +147,7 @@ struct IP::Address::IPv6 < IP::Address
 		return to_s_mini_simple(upcase, io) if ( minify.simple? )
 		return to_s_mini_aggressive(upcase, io) if ( minify.agressive? )
 
-		groups.each_with_index() { |group, i|
+		hextets.each_with_index() { |group, i|
 			io << ':' if ( i != 0 )
 			string = group.to_s(16, upcase: upcase)
 			(4 - string.size).times() { io << '0' }
@@ -163,11 +163,12 @@ struct IP::Address::IPv6 < IP::Address
 	# :nodoc:
 	private def to_s_mini_simple(upcase : Bool, io : IO) : Nil
 		state = :fresh
-		io << ':' if ( groups.first == 0 )
-		groups.each_with_index() { |group, i|
+		hextets = hextets()
+		io << ':' if ( hextets.first == 0 )
+		hextets.each_with_index() { |hextet, i|
 			if ( state == :in )
-				if ( group == 0 )
-					io << ':' if ( i == groups.size - 1 )
+				if ( hextet == 0 )
+					io << ':' if ( i == hextets.size - 1 )
 					next
 				end
 
@@ -176,12 +177,12 @@ struct IP::Address::IPv6 < IP::Address
 
 			io << ':' if ( i != 0 )
 
-			if ( state == :fresh && group == 0 )
+			if ( state == :fresh && hextet == 0 )
 				state = :in
 				next
 			end
 
-			string = group.to_s(16, upcase: upcase)
+			string = hextet.to_s(16, upcase: upcase)
 			io << string
 		}
 		io << '0' if ( value == 0_u128)
@@ -192,20 +193,20 @@ struct IP::Address::IPv6 < IP::Address
 		streaks = Array(Array(UInt16)|UInt16|Nil).new(8)
 		streak : Array(UInt16)? = nil
 
-		groups.each() { |group|
+		hextets.each() { |hextet|
 			if ( streak )
-				if ( group == 0 )
-					streak << group
+				if ( hextet == 0 )
+					streak << hextet
 					next
 				end
 				streaks << streak
 				streak = nil
-				streaks << group
-			elsif ( group == 0 )
+				streaks << hextet
+			elsif ( hextet == 0 )
 				streak = Array(UInt16).new()
-				streak << group
+				streak << hextet
 			else
-				streaks << group
+				streaks << hextet
 			end
 		}
 		streaks << streak if ( streak )
@@ -251,95 +252,61 @@ struct IP::Address::IPv6 < IP::Address
 		sockaddr.sin6_addr.__u6_addr.__u6_addr16 = value_network
 		sockaddr.sin6_scope_id                   = 0_u32.as(LibC::UInt32T)
 
-		ptr_sockaddr = Pointer(LibC::SockaddrIn6).malloc()
-		ptr_sockaddr.copy_from(pointerof(sockaddr), 1)
-		return ptr_sockaddr.as(LibC::Sockaddr*)
+		ptr = Pointer(LibC::SockaddrIn6).malloc()
+		ptr.copy_from(pointerof(sockaddr), 1)
+		return ptr.as(LibC::Sockaddr*)
 	end
 
 
 	# :nodoc:
-	private class Parser
+	private class Parser < Address::Parser
 
 		SEPARATOR = ':'
-		NULL = '\0'
-		A_LOWER = 'a' - 10
-		A_UPPER = 'A' - 10
 
-		def self.groups(string : String) : Tuple(UInt16, UInt16, UInt16, UInt16, UInt16, UInt16, UInt16, UInt16)?
-			return nil if ( string.empty? )
-			return nil if ( !string.ascii_only? )
-
-			return new(string).groups
+		def self.hextets(string : String) : Hextets?
+			return nil if ( string.empty? || !string.ascii_only? )
+			return new(string).hextets
 		end
 
-		private def initialize(string : String)
-			@cursor = Char::Reader.new(string)
+		protected def next_value() : Hextet?
+			hextet = read_hex(SEPARATOR)
+			return nil if ( !hextet || hextet > 0xFFFF )
+			return hextet.to_u16
 		end
 
-		protected def hex_char(char : Char)
-			return (char - '0') if ( char.number? )
-			return (char - A_LOWER) if ( 'a' <= char <= 'f' )
-			return (char - A_UPPER) if ( 'A' <= char <= 'F' )
-			return nil
-		end
+		protected def hextets() : Hextets?
+			left = Array(Hextet).new(8)
+			right = nil
 
-		protected def hex_char?(char : Char)
-			return true if ( char.number? )
-			return true if ( 'a' <= char <= 'f' )
-			return true if ( 'A' <= char <= 'F' )
-			return false
-		end
+			8.times { |count|
+				if ( char?(SEPARATOR) && !right )
+					right = Array(Hextet).new(8)
+					next_char
+					next_char? if ( left.empty? )
+					break if ( !has_next?() )
+				end
 
-		protected def next_group() : UInt16?
-			char = @cursor.current_char
-			return nil if ( !hex_char?(char) )
+				hextet = next_value()
+				return nil if ( hextet.nil? )
+				( right ) ? right << hextet : left << hextet
 
-			octet = 0_u32
-			count = 0
-
-			loop {
-				return nil if ( count > 4 )
-				break if ( char == SEPARATOR )
-
-				value = hex_char(char)
-				return nil if ( !value )
-				octet *= 16
-				octet += value
-
-				break if ( !@cursor.has_next? )
-				char = @cursor.next_char()
-				break if ( count == 4 || char == NULL )
-				count += 1
+				break if ( at_end?() )
+				return nil if ( !char?(SEPARATOR) || !has_next?() )
+				next_char()
 			}
 
-			return nil if ( octet > 0xFFFF )
-			return octet.to_u16
-		end
+			return nil if ( left.empty? && ( right && ( right.empty? || ( right.size == 8 ) ) ) )
+			if ( right )
+				diff = 8 - (left.size + right.size)
+				return nil if ( diff < 0 )
 
-		protected def groups() : Tuple(UInt16, UInt16, UInt16, UInt16, UInt16, UInt16, UInt16, UInt16)?
-			groups = Slice[0_u16, 0_u16, 0_u16, 0_u16, 0_u16, 0_u16, 0_u16, 0_u16]
-			idx = 0_i8
+				diff.times() { left << 0_u16 }
+				right.each() { |elm| left << elm }
+			end
 
-			loop {
-				return nil if ( idx > 7 )
-				group = next_group()
-
-				return nil if ( group.nil? )
-				groups[idx] = group
-
-				char = @cursor.current_char
-				break if ( char == NULL )
-				return nil if ( char != SEPARATOR || !@cursor.has_next? )
-
-				char = @cursor.next_char()
-				#if ( char == ':' )
-
-				idx += 1
-			}
-
-			return nil if ( @cursor.current_char() != NULL )
-
-			return { groups[0], groups[1], groups[2], groups[3], groups[4], groups[5], groups[6], groups[7] }
+			return nil if left.size != 8
+			return nil if has_next?()
+			return { left[0], left[1], left[2], left[3], left[4], left[5], left[6], left[7] }
 		end
 
 	end

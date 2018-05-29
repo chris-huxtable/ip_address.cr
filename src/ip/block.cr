@@ -18,6 +18,7 @@ end
 require "./address"
 
 abstract struct IP::Block
+
 	include Comparable(IP::Address)
 
 	# Constructs a new `IP::Block` by interpreting the contents of a given `String`.
@@ -139,7 +140,7 @@ abstract struct IP::Block
 
 	# Returns the blocks mask.
 	def mask() : IP::Address
-		return address.class.new(address.max_address() - size() + 1)
+		return address.class.new(address.max_value() - size() + 1)
 	end
 
 	# Informs if the block is IPv4 or not.

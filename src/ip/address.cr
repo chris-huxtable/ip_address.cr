@@ -13,13 +13,8 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 abstract struct IP::Address
-end
 
-require "./block"
-
-abstract struct IP::Address
 	include Comparable(IP::Address)
-	include Comparable(IP::Block)
 
 	# Constructs a new IPv4 or IPv6 `IP::Address` by interpreting  the contents of a `String`.
 	#
@@ -114,16 +109,16 @@ abstract struct IP::Address
 	abstract def width
 
 	# The maximum address of this type.
-	abstract def max_address
+	abstract def max_value
 
 	# Informs if the address is IPv4 or not.
 	def ipv4?() : Bool
-		return false
+		return is_a?(IP::Address::IPv4)
 	end
 
 	# Informs if the address is IPv6 or not.
 	def ipv6?() : Bool
-		return false
+		return is_a?(IP::Address::IPv6)
 	end
 
 	# Returns the `Socket::Family` associated with this address.
@@ -162,41 +157,10 @@ abstract struct IP::Address
 		value.hash(hasher)
 	end
 
-	# Compares this address to a given `IP::Block` returning `true` if the address falls
-	# after the block.
-#	def >(other : IP::Block)
-#		return ( value > other.last.value )
-#	end
-
-	# Compares this address to a given `IP::Block` returning `true` if the address falls
-	# inside or after the block.
-#	def >=(other : IP::Block)
-#		return ( value >= other.first.value )
-#	end
-
-	# Compares this address to a given `IP::Block` returning `true` if the address falls
-	# before the block.
-#	def <(other : IP::Block)
-#		return ( value < other.first.value )
-#	end
-
-	# Compares this address to a given `IP::Block` returning `true` if the address falls
-	# inside or before the block.
-#	def <=(other : IP::Block)
-#		return ( value <= other.last.value )
-#	end
-
 	# Compares this address with another, returning `-1`, `0` or `+1` depending if the
 	# address is less, equal or greater than the *other* address.
 	def <=>(other : IP::Address) : Int
 		return ( value <=> other.value )
-	end
-
-	# Compares this address with block, returning `-1`, `0` or `+1` depending if the
-	# address is less than, included in, or greater than the *other* block.
-	def <=>(other : IP::Block) : Int
-		return 0 if other.includes?(self)
-		return ( self <=> other.first )
 	end
 
 	# Compares this address with another address, indicating if they are adjacent.
@@ -206,16 +170,6 @@ abstract struct IP::Address
 	def adjacent?(other : IP::Address)
 		return true if ( value > other.value && (value == other.value + 1) )
 		return true if ( value < other.value && (value == other.value - 1) )
-		return false
-	end
-
-	# Compares this address with an `IP::Block`, indicating if they are adjacent.
-	#
-	# Adjacency is when there are no addresses between the address and the other address
-	# block and the address is not included in the block.
-	def adjacent?(other : IP::Block)
-		return true if ( value > last_value && (value == last_value + 1) )
-		return true if ( value < first_value && (value == first_value - 1) )
 		return false
 	end
 
@@ -253,6 +207,136 @@ abstract struct IP::Address
 
 	# :nodoc:
 	class OutOfBoundsError < Exception; end
+
+
+	# :nodoc:
+	abstract class Parser
+
+		NULL = '\0'
+
+		private def initialize(string : String)
+			@cursor = Char::Reader.new(string)
+		end
+
+
+		# MARK: - Queries
+
+		protected delegate(current_char, to: @cursor)
+		protected delegate(next_char, to: @cursor)
+		protected delegate(has_next?, to: @cursor)
+
+		protected def next_char?() : Char?
+			return nil if ( !has_next? )
+			return next_char()
+		end
+
+		protected def at_end?() : Bool
+			return ( current_char() == NULL )
+		end
+
+		protected def char?(char : Char?) : Bool
+			return false if ( !char )
+			return ( current_char() == char )
+		end
+
+
+		# MARK: - Reading
+
+		protected def read_int(terminator : Char, limit : UInt8 = 3_u8) : UInt32?
+			char = current_char
+			return nil if ( !char.ascii_number? )
+
+			value = 0_u32
+			loop {
+				break if ( char == terminator )
+
+				return nil if ( !char.ascii_number? )
+				value *= 10_u32
+				value += char.to_i()
+
+				break if ( !has_next?() )
+				char = next_char()
+
+				break if ( limit <= 0 || char == NULL )
+				limit -= 1
+			}
+
+			return value
+		end
+
+		protected def read_hex(terminator : Char, limit : UInt8 = 4_u8) : UInt32?
+			char = current_char
+			return nil if ( !char.hex? )
+
+			value = 0_u32
+			loop {
+				break if ( char == terminator )
+
+				return nil if ( !char.hex? )
+				value *= 16_u32
+				value += char.to_i(16)
+
+				break if ( !has_next?() )
+				char = next_char()
+
+				break if ( limit <= 0 || char == NULL )
+				limit -= 1
+			}
+
+			return value
+		end
+
+	end
+
+end
+
+require "./block"
+
+abstract struct IP::Address
+
+	include Comparable(IP::Block)
+
+	# Compares this address to a given `IP::Block` returning `true` if the address falls
+	# after the block.
+#	def >(other : IP::Block)
+#		return ( value > other.last.value )
+#	end
+
+	# Compares this address to a given `IP::Block` returning `true` if the address falls
+	# inside or after the block.
+#	def >=(other : IP::Block)
+#		return ( value >= other.first.value )
+#	end
+
+	# Compares this address to a given `IP::Block` returning `true` if the address falls
+	# before the block.
+#	def <(other : IP::Block)
+#		return ( value < other.first.value )
+#	end
+
+	# Compares this address to a given `IP::Block` returning `true` if the address falls
+	# inside or before the block.
+#	def <=(other : IP::Block)
+#		return ( value <= other.last.value )
+#	end
+
+	# Compares this address with block, returning `-1`, `0` or `+1` depending if the
+	# address is less than, included in, or greater than the *other* block.
+	def <=>(other : IP::Block) : Int
+		return 0 if other.includes?(self)
+		return ( self <=> other.first )
+	end
+
+	# Compares this address with an `IP::Block`, indicating if they are adjacent.
+	#
+	# Adjacency is when there are no addresses between the address and the other address
+	# block and the address is not included in the block.
+	def adjacent?(other : IP::Block)
+		return true if ( value > last_value && (value == last_value + 1) )
+		return true if ( value < first_value && (value == first_value - 1) )
+		return false
+	end
+
 end
 
 require "./address/*"

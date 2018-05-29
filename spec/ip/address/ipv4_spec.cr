@@ -13,22 +13,27 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 
-private def address_should_eq(string : String, equals : String = string) : Nil
+private def address_should_eq(string : String, equals : String = string, file = __FILE__, line = __LINE__) : Nil
 	IP::Address::IPv4[string].to_s.should eq(equals)
 end
 
-private def address_should_raise(string : String) : Nil
+private def address_should_raise(string : String, file = __FILE__, line = __LINE__) : Nil
 	expect_raises IP::Address::MalformedError do
 		IP::Address::IPv4[string]
 	end
 end
 
-private def address_should_eq?(string : String, equals : String = string) : Nil
-	IP::Address::IPv4[string]?.to_s.should eq(equals)
+private def address_should_eq?(string : String, equals : String = string, file = __FILE__, line = __LINE__) : Nil
+	if ( addr = IP::Address::IPv4[string]? )
+		addr.to_s().should eq(equals)
+	else
+		fail("Address was nil", file, line)
+	end
 end
 
-private def address_should_be_nil(string : String) : Nil
-	IP::Address::IPv4[string]?.should be_nil
+private def address_should_be_nil(string : String, file = __FILE__, line = __LINE__) : Nil
+	addr = IP::Address::IPv4[string]?
+	fail("Address was #{addr.to_s()}", file, line) if ( addr )
 end
 
 

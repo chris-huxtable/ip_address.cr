@@ -20,11 +20,16 @@ require "../../lib_c/arpa/inet"
 
 struct IP::Address::IPv4 < IP::Address
 
+	alias Value = UInt32
+	alias Octet = UInt8
+	alias Octets = Tuple(Octet, Octet, Octet, Octet)
+
 	ADDRESS_MAX = 0xFFFF_FFFF_u32
 	ADDRESS_WIDTH = 32_u8
 
-	# Creates a new `IP::Address::IPv4` from a `UInt32` value.
-	def initialize(@value : UInt32)
+
+	# Creates a new `IP::Address::IPv4` from a `{{ Value.id }}` value.
+	def initialize(@value : Value)
 	end
 
 	# Constructs a new `IP::Address::IPv4` from the contents of a `String`. Expects an address
@@ -46,7 +51,7 @@ struct IP::Address::IPv4 < IP::Address
 	end
 
 	# Constructs a new `IP::Address::IPv4` from a `Tuple` of 4 `UInt8`.
-	def self.new(octets : Tuple(UInt8, UInt8, UInt8, UInt8)) : self
+	def self.new(octets : Octets) : self
 		value  = 0_u32
 		value += (octets[0].to_u32 << 24 )
 		value += (octets[1].to_u32 << 16 )
@@ -58,8 +63,8 @@ struct IP::Address::IPv4 < IP::Address
 
 	# Constructs a new `IP::Address::IPv4` from a `SockaddrIn*`.
 	def self.new(sockaddr : LibC::SockaddrIn*) : self
-		v = sockaddr.value.sin_addr.s_addr.as(UInt32)
-		return new(LibC.ntohl(v).as(UInt32))
+		v = sockaddr.value.sin_addr.s_addr.as(Value)
+		return new(LibC.ntohl(v).as(Value))
 	end
 
 	# Constructs a new `IP::Address::IPv4` from an `Int`.
@@ -70,7 +75,7 @@ struct IP::Address::IPv4 < IP::Address
 	end
 
 	# The internally stored value of the address.
-	getter value : UInt32
+	getter value : Value
 
 	# The internally stored value of the address in network byte order.
 	def value_network() : LibC::UInt32T
@@ -83,13 +88,8 @@ struct IP::Address::IPv4 < IP::Address
 	end
 
 	# The maximum address of this type.
-	def max_address() : UInt32
+	def max_value() : Value
 		return ADDRESS_MAX
-	end
-
-	# Informs if the address is IPv4 or not.
-	def ipv4?() : Bool
-		return true
 	end
 
 	# Informs if the address is in the loopback address space or not.
@@ -101,7 +101,8 @@ struct IP::Address::IPv4 < IP::Address
 	#
 	# Raises `OutOfBoundsError` if the requested octet is not [0..3].
 	def [](index : Int) : UInt8
-		raise OutOfBoundsError.new("Index #{index} is out of bounds.") if ( index > 3 || index < 0)
+		raise OutOfBoundsError.new("Index #{index} out of bounds. Too high.") if ( index > 3 )
+		raise OutOfBoundsError.new("Index #{index} out of bounds. Too low.")  if ( index < 0 )
 
 		shift = (32 - ((index + 1) * 8))
 		value = ((0xFF << shift) & @value) >> shift
@@ -109,16 +110,13 @@ struct IP::Address::IPv4 < IP::Address
 	end
 
 	# Returns a `Tuple` of 4 `UInt8` which represent the addresses octets.
-	def octets() : Tuple(UInt8, UInt8, UInt8, UInt8)
+	def octets() : Octets
 		return { self[0], self[1], self[2], self[3] }
 	end
 
 	# Appends the presentation representation of the address to the given `IO`.
 	def to_s(io : IO)
-		io << self[0] << '.'
-		io << self[1] << '.'
-		io << self[2] << '.'
-		io << self[3]
+		io << self[0] << '.' << self[1] << '.' << self[2] << '.' << self[3]
 	end
 
 	# Produces the c `sockaddr_in` struct required by `bind`, `connect`, `sendto`, and `sendmsg`.
@@ -141,65 +139,36 @@ struct IP::Address::IPv4 < IP::Address
 
 
 	# :nodoc:
-	private class Parser
+	private class Parser < Address::Parser
 
 		SEPARATOR = '.'
-		NULL = '\0'
 
-		def self.octets(string : String) : Tuple(UInt8, UInt8, UInt8, UInt8)?
-			return nil if ( string.empty? )
-			return nil if ( !string.ascii_only? )
-
+		def self.octets(string : String) : Octets?
+			return nil if ( string.empty? || !string.ascii_only? )
 			return new(string).octets
 		end
 
-		private def initialize(string : String)
-			@cursor = Char::Reader.new(string)
-		end
-
-		protected def next_octet() : UInt8?
-			char = @cursor.current_char
-			return nil if ( !char.number? )
-
-			octet = 0_u16
-			count = 0
-
-			loop {
-				return nil if ( count > 2 )
-				break if ( char == SEPARATOR )
-
-				return nil if ( !char.number? )
-				octet *= 10
-				octet += (char - '0')
-
-				break if ( !@cursor.has_next? )
-				char = @cursor.next_char()
-				break if ( count == 2 || char == NULL )
-				count += 1
-			}
-
-			return nil if ( octet > 255 )
+		protected def next_value() : Octet?
+			octet = read_int(SEPARATOR)
+			return nil if ( !octet || octet > 255 )
 			return octet.to_u8
 		end
 
-		protected def octets() : Tuple(UInt8, UInt8, UInt8, UInt8)?
+		protected def octets() : Octets?
 			octets = Slice[0_u8, 0_u8, 0_u8, 0_u8]
-			count = 0
 
-			loop {
-				return nil if ( count > 3 )
-				octet = next_octet()
+			4.times { |count|
+				octet = next_value()
 
 				return nil if ( octet.nil? )
 				octets[count] = octet
 
-				char = @cursor.current_char
-				break if ( char == NULL )
-				return nil if ( char != SEPARATOR || !@cursor.has_next? )
-				@cursor.next_char()
-				count += 1
+				break if ( at_end?() )
+				return nil if ( !char?(SEPARATOR) || !has_next?() )
+				next_char()
 			}
 
+			return nil if has_next?()
 			return { octets[0], octets[1], octets[2], octets[3] }
 		end
 

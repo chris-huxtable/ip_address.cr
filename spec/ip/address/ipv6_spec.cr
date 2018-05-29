@@ -16,38 +16,36 @@ private None = IP::Address::IPv6::Minification::None
 private Simple = IP::Address::IPv6::Minification::Simple
 private Agressive = IP::Address::IPv6::Minification::Agressive
 
-private def address_should_eq(string : String, equals : String = string) : Nil
+private def address_should_eq(string : String, equals : String = string, file = __FILE__, line = __LINE__) : Nil
 	IP::Address::IPv6[string].to_s.should eq(equals)
 end
 
-private def address_should_raise(string : String) : Nil
+private def address_should_raise(string : String, file = __FILE__, line = __LINE__) : Nil
 	expect_raises IP::Address::MalformedError do
 		IP::Address::IPv6[string]
 	end
 end
 
-private def address_should_eq?(string : String, equals : String = string) : Nil
-	addr = IP::Address::IPv6[string]?
-	if ( addr.nil? )
-		addr.should_not be_nil
-	else
+private def address_should_eq?(string : String, equals : String = string, file = __FILE__, line = __LINE__) : Nil
+	if ( addr = IP::Address::IPv6[string]? )
 		addr.to_s(false, Agressive).should eq(equals)
-	end
-end
-
-private def address_should_to_s?(string : String, equals : String = string, upcase : Bool = false, minify : IP::Address::IPv6::Minification = Simple) : Nil
-	addr = IP::Address::IPv6[string]?
-	if ( addr.nil? )
-		addr.should_not be_nil
 	else
-		addr.to_s(upcase, minify).should eq(equals)
+		fail("Address was nil", file, line)
 	end
 end
 
+private def address_should_to_s?(string : String, equals : String = string, upcase : Bool = false, minify : IP::Address::IPv6::Minification = Simple, file = __FILE__, line = __LINE__) : Nil
+	if ( addr = IP::Address::IPv6[string]? )
+		addr.to_s(upcase, minify).should eq(equals)
+	else
+		fail("Address was nil", file, line)
+	end
+end
 
-private def address_should_be_nil(string : String) : Nil
+private def address_should_be_nil(string : String, file = __FILE__, line = __LINE__) : Nil
 	IP::Address::IPv6[string]?.should be_nil
 end
+
 
 describe IP::Address::IPv6 do
 
@@ -60,8 +58,10 @@ describe IP::Address::IPv6 do
 			address_should_eq?("2001:0db8:0123:4567:89ab:cdef:1234:5678", "2001:db8:123:4567:89ab:cdef:1234:5678")
 			address_should_eq?("2001:0db8:123:4567:89ab:cdef:1234:5678", "2001:db8:123:4567:89ab:cdef:1234:5678")
 			address_should_eq?("0:0:0:0:0:0:0:0", "::0")
-			#address_should_eq?("1::2", "1::2")
-			#address_should_eq?("::9999", "::9999")
+			address_should_eq?("1::2", "1::2")
+			address_should_eq?("1::", "1::")
+			address_should_eq?("::2", "::2")
+			address_should_eq?("::9999", "::9999")
 		end
 
 		it "recognizes invalid blocks" do
@@ -71,6 +71,8 @@ describe IP::Address::IPv6 do
 			address_should_be_nil("1.2.3.4")
 			address_should_be_nil(":")
 			address_should_be_nil("::")
+			address_should_be_nil("0:0:0:0:0:0:0:0::")
+			address_should_be_nil("::0:0:0:0:0:0:0:0")
 			address_should_be_nil(":::")
 #			address_should_be_nil("ffff:eeee:dddd:cccc:bbbb:aaaa:1234:")
 #			address_should_be_nil(":eeee:dddd:cccc:bbbb:aaaa:1234:9999")
