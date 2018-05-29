@@ -25,13 +25,6 @@ struct IP::Address::IPv6 < IP::Address
 	ADDRESS_MAX = 0xFFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_u128
 	ADDRESS_WIDTH = 128_u8
 
-	# :nodoc:
-	enum Minification
-		None
-		Simple
-		Agressive
-	end
-
 	# Creates a new `IP::Address::IPv6` from a `{{ Value.id }}` value.
 	def initialize(@value : Value)
 	end
@@ -128,24 +121,13 @@ struct IP::Address::IPv6 < IP::Address
 	end
 
 	# Returns the presentation representation of the address as a `String`.
-	#
-	# `Minification`
-	# - `None`
-	# - `Simple`
-	# - `Agressive`
-	def to_s(upcase : Bool = false, minify : Minification = Minification::Simple) : String
+	def to_s(upcase : Bool = false, minify : Bool = true) : String
 		return String.build() { |io| to_s(upcase, minify, io) }
 	end
 
 	# Appends the presentation representation of the address to the given `IO`.
-	#
-	# `Minification`
-	# - `None`
-	# - `Simple`
-	# - `Agressive`
-	def to_s(upcase : Bool, minify : Minification, io : IO) : Nil
-		return to_s_mini_simple(upcase, io) if ( minify.simple? )
-		return to_s_mini_aggressive(upcase, io) if ( minify.agressive? )
+	def to_s(upcase : Bool, minify : Bool, io : IO) : Nil
+		return to_s_minify(upcase, io) if ( minify )
 
 		hextets.each_with_index() { |group, i|
 			io << ':' if ( i != 0 )
@@ -157,39 +139,11 @@ struct IP::Address::IPv6 < IP::Address
 
 	# :nodoc:
 	def to_s(io : IO)
-		to_s(false, Minification::Simple, io)
+		to_s(false, true, io)
 	end
 
 	# :nodoc:
-	private def to_s_mini_simple(upcase : Bool, io : IO) : Nil
-		state = :fresh
-		hextets = hextets()
-		io << ':' if ( hextets.first == 0 )
-		hextets.each_with_index() { |hextet, i|
-			if ( state == :in )
-				if ( hextet == 0 )
-					io << ':' if ( i == hextets.size - 1 )
-					next
-				end
-
-				state = :finished
-			end
-
-			io << ':' if ( i != 0 )
-
-			if ( state == :fresh && hextet == 0 )
-				state = :in
-				next
-			end
-
-			string = hextet.to_s(16, upcase: upcase)
-			io << string
-		}
-		io << '0' if ( value == 0_u128)
-	end
-
-	# :nodoc:
-	private def to_s_mini_aggressive(upcase : Bool, io : IO) : Nil
+	private def to_s_minify(upcase : Bool, io : IO) : Nil
 		streaks = Array(Array(UInt16)|UInt16|Nil).new(8)
 		streak : Array(UInt16)? = nil
 
@@ -226,10 +180,13 @@ struct IP::Address::IPv6 < IP::Address
 		streaks.each_with_index() { |e, i|
 			io << ':' if ( i != 0 )
 			case e
-				when Array then e.each_with_index() { |e, i| e.to_s(16, io) }
 				when UInt16 then e.to_s(16, io)
-				when Nil
-					io << ':' if ( i == 0 || i == max_idx )
+				when Nil then io << ':' if ( i == 0 || i == max_idx )
+				when Array
+					e.each_with_index() { |hextet, i|
+						io << ':' if ( i != 0 )
+						hextet.to_s(16, io)
+					}
 			end
 		}
 
@@ -300,7 +257,11 @@ struct IP::Address::IPv6 < IP::Address
 				next_char()
 			}
 
-			return nil if ( left.empty? && ( right && ( right.empty? || ( right.size == 8 ) ) ) )
+			if ( left.empty? && right )
+				return { 0_u16, 0_u16, 0_u16, 0_u16, 0_u16, 0_u16, 0_u16, 0_u16 } if ( right.empty? )
+				return nil if ( right.size == 8 )
+			end
+
 			if ( right )
 				diff = 8 - (left.size + right.size)
 				return nil if ( diff < 0 )

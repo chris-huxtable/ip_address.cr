@@ -12,10 +12,6 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-private None = IP::Address::IPv6::Minification::None
-private Simple = IP::Address::IPv6::Minification::Simple
-private Agressive = IP::Address::IPv6::Minification::Agressive
-
 private def address_should_eq(string : String, equals : String = string, file = __FILE__, line = __LINE__) : Nil
 	IP::Address::IPv6[string].to_s.should eq(equals)
 end
@@ -28,22 +24,22 @@ end
 
 private def address_should_eq?(string : String, equals : String = string, file = __FILE__, line = __LINE__) : Nil
 	if ( addr = IP::Address::IPv6[string]? )
-		addr.to_s(false, Agressive).should eq(equals)
+		addr.to_s(false).should eq(equals)
 	else
 		fail("Address was nil", file, line)
 	end
 end
 
-private def address_should_to_s?(string : String, equals : String = string, upcase : Bool = false, minify : IP::Address::IPv6::Minification = Simple, file = __FILE__, line = __LINE__) : Nil
+private def address_should_to_s?(string : String, equals : String = string, upcase : Bool = false, minify : Bool = true, file = __FILE__, line = __LINE__) : Nil
 	if ( addr = IP::Address::IPv6[string]? )
 		addr.to_s(upcase, minify).should eq(equals)
 	else
-		fail("Address was nil", file, line)
+		fail("Address was nil", file: file, line: line)
 	end
 end
 
 private def address_should_be_nil(string : String, file = __FILE__, line = __LINE__) : Nil
-	IP::Address::IPv6[string]?.should be_nil
+	IP::Address::IPv6[string]?.should(be_nil, file, line)
 end
 
 
@@ -62,6 +58,7 @@ describe IP::Address::IPv6 do
 			address_should_eq?("1::", "1::")
 			address_should_eq?("::2", "::2")
 			address_should_eq?("::9999", "::9999")
+			address_should_eq("::", "::0")
 		end
 
 		it "recognizes invalid addresses" do
@@ -70,7 +67,6 @@ describe IP::Address::IPv6 do
 			address_should_be_nil(".")
 			address_should_be_nil("1.2.3.4")
 			address_should_be_nil(":")
-			address_should_be_nil("::")
 			address_should_be_nil("0:0:0:0:0:0:0:0::")
 			address_should_be_nil("::0:0:0:0:0:0:0:0")
 			address_should_be_nil(":::")
@@ -115,46 +111,36 @@ describe IP::Address::IPv6 do
 
 		it "adjusts case" do
 			address_should_to_s?("ffff:eeee:dddd:cccc:bbbb:aaaa:1234:9999")
-			address_should_to_s?("ffff:eeee:dddd:cccc:bbbb:aaaa:1234:9999", "FFFF:EEEE:DDDD:CCCC:BBBB:AAAA:1234:9999", upcase: true, minify: None)
-			address_should_to_s?("FFFF:EEEE:DDDD:CCCC:BBBB:AAAA:1234:9999", "FFFF:EEEE:DDDD:CCCC:BBBB:AAAA:1234:9999", upcase: true, minify: None)
-			address_should_to_s?("FFFF:EEEE:DDDD:CCCC:BBBB:AAAA:1234:9999", "ffff:eeee:dddd:cccc:bbbb:aaaa:1234:9999", upcase: false, minify: None)
+			address_should_to_s?("ffff:eeee:dddd:cccc:bbbb:aaaa:1234:9999", "FFFF:EEEE:DDDD:CCCC:BBBB:AAAA:1234:9999", upcase: true, minify: false)
+			address_should_to_s?("FFFF:EEEE:DDDD:CCCC:BBBB:AAAA:1234:9999", "FFFF:EEEE:DDDD:CCCC:BBBB:AAAA:1234:9999", upcase: true, minify: false)
+			address_should_to_s?("FFFF:EEEE:DDDD:CCCC:BBBB:AAAA:1234:9999", "ffff:eeee:dddd:cccc:bbbb:aaaa:1234:9999", upcase: false, minify: false)
 		end
 
 		it "doesn't compress" do
 			address_should_to_s?("ffff:eeee:dddd:cccc:bbbb:aaaa:1234:9999")
-			address_should_to_s?("ffff:eeee:dddd:cccc:bbbb:aaaa:1234:9999", "FFFF:EEEE:DDDD:CCCC:BBBB:AAAA:1234:9999", upcase: true, minify: None)
-			address_should_to_s?("FFFF:EEEE:DDDD:CCCC:BBBB:AAAA:1234:9999", "FFFF:EEEE:DDDD:CCCC:BBBB:AAAA:1234:9999", upcase: true, minify: None)
-			address_should_to_s?("FFFF:EEEE:DDDD:CCCC:BBBB:AAAA:1234:9999", "ffff:eeee:dddd:cccc:bbbb:aaaa:1234:9999", upcase: false, minify: None)
+			address_should_to_s?("ffff:eeee:dddd:cccc:bbbb:aaaa:1234:9999", "FFFF:EEEE:DDDD:CCCC:BBBB:AAAA:1234:9999", upcase: true, minify: false)
+			address_should_to_s?("FFFF:EEEE:DDDD:CCCC:BBBB:AAAA:1234:9999", "FFFF:EEEE:DDDD:CCCC:BBBB:AAAA:1234:9999", upcase: true, minify: false)
+			address_should_to_s?("FFFF:EEEE:DDDD:CCCC:BBBB:AAAA:1234:9999", "ffff:eeee:dddd:cccc:bbbb:aaaa:1234:9999", upcase: false, minify: false)
 
-			address_should_to_s?("0:0:0:0:0:0:0:0", "0000:0000:0000:0000:0000:0000:0000:0000", upcase: false, minify: None)
+			address_should_to_s?("0:0:0:0:0:0:0:0", "0000:0000:0000:0000:0000:0000:0000:0000", upcase: false, minify: false)
 		end
 
-		it "simply compresses" do
-			address_should_to_s?("FFFF:EEEE:0000:0000:0000:AAAA:1234:9999", "ffff:eeee::aaaa:1234:9999", minify: Simple)
-			address_should_to_s?("FFFF:EEEE:0000:0000:0000:AAAA:0012:9999", "ffff:eeee::aaaa:12:9999", minify: Simple)
-			address_should_to_s?("0000:EEEE:0000:0000:0000:AAAA:1234:9999", "::eeee:0:0:0:aaaa:1234:9999", minify: Simple)
-			address_should_to_s?("FFFF:EEEE:0000:0000:0000:AAAA:0012:0000", "ffff:eeee::aaaa:12:0", minify: Simple)
+		it "compresses" do
+			address_should_to_s?("FFFF:EEEE:0000:0000:0000:AAAA:1234:9999", "ffff:eeee::aaaa:1234:9999", minify: true)
+			address_should_to_s?("FFFF:EEEE:0000:0000:0000:AAAA:0012:9999", "ffff:eeee::aaaa:12:9999", minify: true)
+			address_should_to_s?("0000:EEEE:0000:0000:0000:AAAA:1234:9999", "0:eeee::aaaa:1234:9999", minify: true)
+			address_should_to_s?("FFFF:EEEE:0000:0000:0000:AAAA:0012:0000", "ffff:eeee::aaaa:12:0", minify: true)
 
-			address_should_to_s?("0000:0000:0000:0000:0000:0000:0000:0001", "::1", minify: Simple)
-			address_should_to_s?("0001:0000:0000:0000:0000:0000:0000:0000", "1::", minify: Simple)
-			address_should_to_s?("0000:0000:0000:0000:0000:0000:0001:0000", "::1:0", minify: Simple)
-			address_should_to_s?("0000:0001:0000:0000:0000:0000:0000:0000", "::1:0:0:0:0:0:0", minify: Simple)
+			address_should_to_s?("0000:0000:0000:0000:0000:0000:0000:0001", "::1", minify: true)
+			address_should_to_s?("0000:0000:0000:0000:0000:0000:0001:0000", "::1:0", minify: true)
+			address_should_to_s?("0000:0000:0000:0000:0000:0001:0000:0000", "::1:0:0", minify: true)
+			address_should_to_s?("0000:0000:0000:0000:0001:0000:0000:0000", "::1:0:0:0", minify: true)
+			address_should_to_s?("0000:0000:0000:0001:0000:0000:0000:0000", "0:0:0:1::", minify: true)
+			address_should_to_s?("0000:0000:0001:0000:0000:0000:0000:0000", "0:0:1::", minify: true)
+			address_should_to_s?("0000:0001:0000:0000:0000:0000:0000:0000", "0:1::", minify: true)
+			address_should_to_s?("0001:0000:0000:0000:0000:0000:0000:0000", "1::", minify: true)
 
-			address_should_to_s?("0:0:0:0:0:0:0:0", "::0", minify: Simple)
-		end
-
-		it "aggressively compresses" do
-			address_should_to_s?("FFFF:EEEE:0000:0000:0000:AAAA:1234:9999", "ffff:eeee::aaaa:1234:9999", minify: Agressive)
-			address_should_to_s?("FFFF:EEEE:0000:0000:0000:AAAA:0012:9999", "ffff:eeee::aaaa:12:9999", minify: Agressive)
-			address_should_to_s?("0000:EEEE:0000:0000:0000:AAAA:1234:9999", "0:eeee::aaaa:1234:9999", minify: Agressive)
-			address_should_to_s?("FFFF:EEEE:0000:0000:0000:AAAA:0012:0000", "ffff:eeee::aaaa:12:0", minify: Agressive)
-
-			address_should_to_s?("0000:0000:0000:0000:0000:0000:0000:0001", "::1", minify: Agressive)
-			address_should_to_s?("0001:0000:0000:0000:0000:0000:0000:0000", "1::", minify: Agressive)
-			address_should_to_s?("0000:0000:0000:0000:0000:0000:0001:0000", "::1:0", minify: Agressive)
-			address_should_to_s?("0000:0001:0000:0000:0000:0000:0000:0000", "0:1::", minify: Agressive)
-
-			address_should_to_s?("0:0:0:0:0:0:0:0", "::0", minify: Agressive)
+			address_should_to_s?("0:0:0:0:0:0:0:0", "::0", minify: true)
 		end
 
 	end
