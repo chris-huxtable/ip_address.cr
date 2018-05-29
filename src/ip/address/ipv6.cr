@@ -281,8 +281,13 @@ struct IP::Address::IPv6 < IP::Address
 			8.times { |count|
 				if ( char?(SEPARATOR) && !right )
 					right = Array(Hextet).new(8)
+
+					if ( left.empty? )
+						return nil if ( !has_next?() )
+						return nil if ( next_char != SEPARATOR )
+					end
+
 					next_char
-					next_char? if ( left.empty? )
 					break if ( !has_next?() )
 				end
 

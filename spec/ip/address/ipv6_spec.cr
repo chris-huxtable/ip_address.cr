@@ -64,7 +64,7 @@ describe IP::Address::IPv6 do
 			address_should_eq?("::9999", "::9999")
 		end
 
-		it "recognizes invalid blocks" do
+		it "recognizes invalid addresses" do
 			address_should_be_nil("")
 			address_should_be_nil(" ")
 			address_should_be_nil(".")
@@ -74,9 +74,9 @@ describe IP::Address::IPv6 do
 			address_should_be_nil("0:0:0:0:0:0:0:0::")
 			address_should_be_nil("::0:0:0:0:0:0:0:0")
 			address_should_be_nil(":::")
-#			address_should_be_nil("ffff:eeee:dddd:cccc:bbbb:aaaa:1234:")
-#			address_should_be_nil(":eeee:dddd:cccc:bbbb:aaaa:1234:9999")
-#			address_should_be_nil("eeee:dddd:cccc:bbbb:aaaa:1234:9999")
+			address_should_be_nil("ffff:eeee:dddd:cccc:bbbb:aaaa:1234:")
+			address_should_be_nil(":eeee:dddd:cccc:bbbb:aaaa:1234:9999")
+			address_should_be_nil("eeee:dddd:cccc:bbbb:aaaa:1234:9999")
 			address_should_be_nil("gggg:eeee:dddd:cccc:bbbb:aaaa:1234:9999")
 			address_should_be_nil("eeee:dddd:cccc:bbbb:aaaa:1234:9999:gggg")
 			address_should_be_nil("eeee:****:cccc:bbbb:aaaa:1234:9999:1234")
