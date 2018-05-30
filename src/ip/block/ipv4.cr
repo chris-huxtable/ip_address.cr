@@ -49,7 +49,8 @@ struct IP::Block::IPv4 < IP::Block
 		address = IP::Address::IPv4.new?(part.first())
 		return nil if ( !address )
 
-		return new?(address, block.to_u8)
+		block = block.to_u8(whitespace: false) { return nil }
+		return new?(address, block)
 	end
 
 	# Constructs a new `IP::Block::IPv4` from an address and the block size, [0-32].

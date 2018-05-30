@@ -186,13 +186,6 @@ abstract struct IP::Address
 	abstract def to_sockaddr()
 
 	# :nodoc:
-	class MalformedError < Exception
-		def new()
-			return new("The address was malformed.")
-		end
-	end
-
-	# :nodoc:
 	class OverflowError < Exception
 		def new()
 			return new("The resultant address overflows.")

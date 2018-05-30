@@ -280,12 +280,6 @@ abstract struct IP::Block
 		io << '/' << block
 	end
 
-	# :nodoc:
-	class MalformedError < Exception
-		def new()
-			return new("The address was malformed.")
-		end
-	end
 end
 
 require "./block/*"
