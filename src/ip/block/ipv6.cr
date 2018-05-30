@@ -51,7 +51,8 @@ struct IP::Block::IPv6 < IP::Block
 		address = IP::Address::IPv6.new?(part.first())
 		return nil if ( !address )
 
-		return new?(address, block.to_u8)
+		block = block.to_u8(whitespace: false) { return nil }
+		return new?(address, block)
 	end
 
 	# Constructs a new `IP::Block::IPv6` from an address and the block size, [0-128].
@@ -68,8 +69,8 @@ struct IP::Block::IPv6 < IP::Block
 		return nil if ( block < 0 )
 		return nil if ( block > IP::Address::IPv6::ADDRESS_WIDTH )
 
-		size = (2**(IP::Address::IPv6::ADDRESS_WIDTH - block))
-		return nil if ((IP::Address::IPv6::ADDRESS_MAX - size + 1) < address.value)
+		size = (2_u128**(IP::Address::IPv6::ADDRESS_WIDTH - block))
+		return nil if ((IP::Address::IPv6::ADDRESS_MAX - size + 1_u128) < address.value)
 
 		return new(address, block.to_u8, size.to_u128)
 	end
