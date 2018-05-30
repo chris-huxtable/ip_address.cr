@@ -8,7 +8,7 @@ deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
-  project_name: atomic_write.cr
+  project_name: ip_address.cr
   on:
     branch: master
   local_dir: docs
