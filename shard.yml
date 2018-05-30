@@ -4,6 +4,9 @@ version: 0.1.1
 authors:
   - Chris Huxtable <chris@huxtable.ca>
 
+description: |
+  Encapsulates IPv4 and IPv6 Addresses and Blocks
+
 crystal: 0.24.2
 
 license: ISC
