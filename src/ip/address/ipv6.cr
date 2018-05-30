@@ -22,7 +22,7 @@ struct IP::Address::IPv6 < IP::Address
 	alias Hextet = UInt16
 	alias Hextets = Tuple(Hextet, Hextet, Hextet, Hextet, Hextet, Hextet, Hextet, Hextet)
 
-	ADDRESS_MAX = 0xFFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_u128
+	ADDRESS_MAX = ~0_u128 #0xFFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_u128
 	ADDRESS_WIDTH = 128_u8
 
 	# Creates a new `IP::Address::IPv6` from a `{{ Value.id }}` value.
