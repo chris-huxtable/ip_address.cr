@@ -13,27 +13,28 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 
-private def address_should_eq(string : String, equals : String = string, file = __FILE__, line = __LINE__) : Nil
-	IP::Address::IPv4[string].to_s.should eq(equals)
-end
-
-private def address_should_raise(string : String, file = __FILE__, line = __LINE__) : Nil
-	expect_raises IP::Address::MalformedError do
-		IP::Address::IPv4[string]
+private def should_eq(string : String, equals : String = string, file = __FILE__, line = __LINE__) : Nil
+	begin
+		IP::Address::IPv4[string].to_s.should(eq(equals), file, line)
+	rescue ex
+		fail("#{equals} #{ex.message}", file, line)
 	end
 end
 
-private def address_should_eq?(string : String, equals : String = string, file = __FILE__, line = __LINE__) : Nil
+private def should_eq?(string : String, equals : String = string, file = __FILE__, line = __LINE__) : Nil
 	if ( addr = IP::Address::IPv4[string]? )
-		addr.to_s().should eq(equals)
+		addr.to_s().should(eq(equals), file, line)
 	else
 		fail("Address was nil", file, line)
 	end
 end
 
-private def address_should_be_nil(string : String, file = __FILE__, line = __LINE__) : Nil
-	addr = IP::Address::IPv4[string]?
-	fail("Address was #{addr.to_s()}", file, line) if ( addr )
+private def should_raise(string : String, file = __FILE__, line = __LINE__) : Nil
+	expect_raises(IP::MalformedError, nil, file, line) { IP::Address::IPv4[string] }
+end
+
+private def should_be_nil(string : String, file = __FILE__, line = __LINE__) : Nil
+	IP::Address::IPv4[string]?.should(be_nil, file, line)
 end
 
 
@@ -41,105 +42,105 @@ describe IP::Address::IPv4 do
 
 	describe ".[]" do
 		it "takes strings" do
-			address_should_eq("10.10.10.10")
-			address_should_eq("10.10.0.1")
-			address_should_eq("10.100.0.1")
-			address_should_eq("127.0.0.0")
-			address_should_eq("127.0.0.1")
-			address_should_eq("0.0.0.0")
-			address_should_eq("255.255.255.255")
+			should_eq("10.10.10.10")
+			should_eq("10.10.0.1")
+			should_eq("10.100.0.1")
+			should_eq("127.0.0.0")
+			should_eq("127.0.0.1")
+			should_eq("0.0.0.0")
+			should_eq("255.255.255.255")
 		end
 
 		it "shrinks unnecessarily long addresses" do
-			address_should_eq("127.000.000.001", "127.0.0.1")
-			address_should_eq("000.000.000.000", "0.0.0.0")
-			address_should_eq("055.055.055.055", "55.55.55.55")
+			should_eq("127.000.000.001", "127.0.0.1")
+			should_eq("000.000.000.000", "0.0.0.0")
+			should_eq("055.055.055.055", "55.55.55.55")
 		end
 
 		it "recognizes invalid addresses" do
-			address_should_raise("")
-			address_should_raise(" ")
-			address_should_raise(".")
-			address_should_raise("...")
-			address_should_raise("0.0.0.")
-			address_should_raise(".0.0.0")
-			address_should_raise("0.0.0.0a")
-			address_should_raise("a0.0.0.0")
-			address_should_raise("0.a0.0.0")
-			address_should_raise("0.0b.0.0")
-			address_should_raise("a0.0.0.0a")
-			address_should_raise("1.2.3.4.5")
-			address_should_raise("1.2.3.4 5")
-			address_should_raise("a.b.c.d")
-			address_should_raise("*.*.*.*")
-			address_should_raise("*.2.3.4")
-			address_should_raise("1.*.3.4")
-			address_should_raise("1.2.*.4")
-			address_should_raise("1.2.3.*")
-			address_should_raise("💩.💩.💩.💩")
-			address_should_raise("💩.2.3.4")
-			address_should_raise("1.💩.3.4")
-			address_should_raise("1.2.💩.4")
-			address_should_raise("1.2.3.💩")
-			address_should_raise("256.255.255.255")
-			address_should_raise("255.256.255.255")
-			address_should_raise("255.255.256.255")
-			address_should_raise("255.255.255.256")
-			address_should_raise("10.10.10.10/10")
-			address_should_raise("10.10.10.10 ")
-			address_should_raise(" 10.10.10.10")
+			should_raise("")
+			should_raise(" ")
+			should_raise(".")
+			should_raise("...")
+			should_raise("0.0.0.")
+			should_raise(".0.0.0")
+			should_raise("0.0.0.0a")
+			should_raise("a0.0.0.0")
+			should_raise("0.a0.0.0")
+			should_raise("0.0b.0.0")
+			should_raise("a0.0.0.0a")
+			should_raise("1.2.3.4.5")
+			should_raise("1.2.3.4 5")
+			should_raise("a.b.c.d")
+			should_raise("*.*.*.*")
+			should_raise("*.2.3.4")
+			should_raise("1.*.3.4")
+			should_raise("1.2.*.4")
+			should_raise("1.2.3.*")
+			should_raise("💩.💩.💩.💩")
+			should_raise("💩.2.3.4")
+			should_raise("1.💩.3.4")
+			should_raise("1.2.💩.4")
+			should_raise("1.2.3.💩")
+			should_raise("256.255.255.255")
+			should_raise("255.256.255.255")
+			should_raise("255.255.256.255")
+			should_raise("255.255.255.256")
+			should_raise("10.10.10.10/10")
+			should_raise("10.10.10.10 ")
+			should_raise(" 10.10.10.10")
 		end
 	end
 
 	describe ".[]?" do
 		it "takes strings" do
-			address_should_eq?("10.10.10.10")
-			address_should_eq?("10.10.0.1")
-			address_should_eq?("10.100.0.1")
-			address_should_eq?("127.0.0.0")
-			address_should_eq?("127.0.0.1")
-			address_should_eq?("0.0.0.0")
-			address_should_eq?("255.255.255.255")
+			should_eq?("10.10.10.10")
+			should_eq?("10.10.0.1")
+			should_eq?("10.100.0.1")
+			should_eq?("127.0.0.0")
+			should_eq?("127.0.0.1")
+			should_eq?("0.0.0.0")
+			should_eq?("255.255.255.255")
 		end
 
 		it "shrinks unnecessarily long addresses" do
-			address_should_eq?("127.000.000.001", "127.0.0.1")
-			address_should_eq?("000.000.000.000", "0.0.0.0")
-			address_should_eq?("055.055.055.055", "55.55.55.55")
+			should_eq?("127.000.000.001", "127.0.0.1")
+			should_eq?("000.000.000.000", "0.0.0.0")
+			should_eq?("055.055.055.055", "55.55.55.55")
 		end
 
 		it "recognizes invalid addresses" do
-			address_should_be_nil("")
-			address_should_be_nil(" ")
-			address_should_be_nil(".")
-			address_should_be_nil("...")
-			address_should_be_nil("0.0.0.")
-			address_should_be_nil(".0.0.0")
-			address_should_be_nil("0.0.0.0a")
-			address_should_be_nil("a0.0.0.0")
-			address_should_be_nil("0.a0.0.0")
-			address_should_be_nil("0.0b.0.0")
-			address_should_be_nil("a0.0.0.0a")
-			address_should_be_nil("1.2.3.4.5")
-			address_should_be_nil("1.2.3.4 5")
-			address_should_be_nil("a.b.c.d")
-			address_should_be_nil("*.*.*.*")
-			address_should_be_nil("*.2.3.4")
-			address_should_be_nil("1.*.3.4")
-			address_should_be_nil("1.2.*.4")
-			address_should_be_nil("1.2.3.*")
-			address_should_be_nil("💩.💩.💩.💩")
-			address_should_be_nil("💩.2.3.4")
-			address_should_be_nil("1.💩.3.4")
-			address_should_be_nil("1.2.💩.4")
-			address_should_be_nil("1.2.3.💩")
-			address_should_be_nil("256.255.255.255")
-			address_should_be_nil("255.256.255.255")
-			address_should_be_nil("255.255.256.255")
-			address_should_be_nil("255.255.255.256")
-			address_should_be_nil("10.10.10.10/10")
-			address_should_be_nil("10.10.10.10 ")
-			address_should_be_nil(" 10.10.10.10")
+			should_be_nil("")
+			should_be_nil(" ")
+			should_be_nil(".")
+			should_be_nil("...")
+			should_be_nil("0.0.0.")
+			should_be_nil(".0.0.0")
+			should_be_nil("0.0.0.0a")
+			should_be_nil("a0.0.0.0")
+			should_be_nil("0.a0.0.0")
+			should_be_nil("0.0b.0.0")
+			should_be_nil("a0.0.0.0a")
+			should_be_nil("1.2.3.4.5")
+			should_be_nil("1.2.3.4 5")
+			should_be_nil("a.b.c.d")
+			should_be_nil("*.*.*.*")
+			should_be_nil("*.2.3.4")
+			should_be_nil("1.*.3.4")
+			should_be_nil("1.2.*.4")
+			should_be_nil("1.2.3.*")
+			should_be_nil("💩.💩.💩.💩")
+			should_be_nil("💩.2.3.4")
+			should_be_nil("1.💩.3.4")
+			should_be_nil("1.2.💩.4")
+			should_be_nil("1.2.3.💩")
+			should_be_nil("256.255.255.255")
+			should_be_nil("255.256.255.255")
+			should_be_nil("255.255.256.255")
+			should_be_nil("255.255.255.256")
+			should_be_nil("10.10.10.10/10")
+			should_be_nil("10.10.10.10 ")
+			should_be_nil(" 10.10.10.10")
 		end
 	end
 
