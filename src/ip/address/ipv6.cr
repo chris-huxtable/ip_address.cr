@@ -66,8 +66,16 @@ struct IP::Address::IPv6 < IP::Address
 	#
 	# TODO: Significant testing nessissary.
 	def self.new(sockaddr : LibC::SockaddrIn6*) : self
-		v = sockaddr.value.sin6_addr.__u6_addr.__u6_addr16
-		v = v.map() { |group| next LibC.ntohs(group).as(UInt16) }
+		v = sockaddr.value
+		{% if flag?(:darwin) || flag?(:openbsd) || flag?(:freebsd) %}
+			v = v.sin6_addr.__u6_addr.__u6_addr16
+		{% elsif flag?(:musl) %}
+			v = v.sin6_addr.__in6_union.__s6_addr16
+		{% elsif flag?(:gnu) || flag?(:linux) %}
+			v = v.sin6_addr.__in6_u.__u6_addr16
+		{% end %}
+
+		v.map!() { |group| next LibC.ntohs(group).as(UInt16) }
 		return new({ v[0], v[1], v[2], v[3], v[4], v[5], v[6], v[7] })
 	end
 
@@ -206,8 +214,16 @@ struct IP::Address::IPv6 < IP::Address
 		sockaddr.sin6_family                     = LibC::AF_INET6
 		sockaddr.sin6_port                       = LibC.htons(port).as(LibC::UInt16T)
 		sockaddr.sin6_flowinfo                   = 0_u32.as(LibC::UInt32T)
-		sockaddr.sin6_addr.__u6_addr.__u6_addr16 = value_network
 		sockaddr.sin6_scope_id                   = 0_u32.as(LibC::UInt32T)
+
+		{% if flag?(:darwin) || flag?(:openbsd) || flag?(:freebsd) %}
+			sockaddr.sin6_addr.__u6_addr.__u6_addr16 = value_network
+		{% elsif flag?(:musl) %}
+			sockaddr.sin6_addr.__in6_union.__s6_addr16 = value_network
+		{% elsif flag?(:gnu) || flag?(:linux) %}
+			sockaddr.sin6_addr.__in6_u.__u6_addr16 = value_network
+		{% end %}
+
 
 		ptr = Pointer(LibC::SockaddrIn6).malloc()
 		ptr.copy_from(pointerof(sockaddr), 1)
