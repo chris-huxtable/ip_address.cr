@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 0.25.1">
+
+
+<link href="../../css/style.css" rel="stylesheet" type="text/css">
+
+<script type="text/javascript" src="../../js/doc.js"></script>
+<script type="text/javascript">
+  CrystalDoc.base_path = "../../";
+</script>
+
+  <meta id="repository-name" content="github.com/chris-huxtable/ip_address.cr">
+  <title>IP::Block::IPv4 - github.com/chris-huxtable/ip_address.cr</title>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false">
+    </div>
+
+    <div class="repository-links">
+      <a href="../../index.html">README</a>
+    </div>
+  </div>
+
+  <div class="search-results" class="hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="github.com/chris-huxtable/ip_address.cr/IP" data-name="ip">
+      <a href="../../IP.html">IP</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="github.com/chris-huxtable/ip_address.cr/IP/Address" data-name="ip::address">
+      <a href="../../IP/Address.html">Address</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="github.com/chris-huxtable/ip_address.cr/IP/Address/IPv4" data-name="ip::address::ipv4">
+      <a href="../../IP/Address/IPv4.html">IPv4</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/chris-huxtable/ip_address.cr/IP/Address/IPv4/Octet" data-name="ip::address::ipv4::octet">
+      <a href="../../IP/Address/IPv4/Octet.html">Octet</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/chris-huxtable/ip_address.cr/IP/Address/IPv4/Octets" data-name="ip::address::ipv4::octets">
+      <a href="../../IP/Address/IPv4/Octets.html">Octets</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/chris-huxtable/ip_address.cr/IP/Address/IPv4/Value" data-name="ip::address::ipv4::value">
+      <a href="../../IP/Address/IPv4/Value.html">Value</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/chris-huxtable/ip_address.cr/IP/Address/IPv6" data-name="ip::address::ipv6">
+      <a href="../../IP/Address/IPv6.html">IPv6</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/chris-huxtable/ip_address.cr/IP/Address/IPv6/Hextet" data-name="ip::address::ipv6::hextet">
+      <a href="../../IP/Address/IPv6/Hextet.html">Hextet</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/chris-huxtable/ip_address.cr/IP/Address/IPv6/Hextets" data-name="ip::address::ipv6::hextets">
+      <a href="../../IP/Address/IPv6/Hextets.html">Hextets</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/chris-huxtable/ip_address.cr/IP/Address/IPv6/Value" data-name="ip::address::ipv6::value">
+      <a href="../../IP/Address/IPv6/Value.html">Value</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent open current" data-id="github.com/chris-huxtable/ip_address.cr/IP/Block" data-name="ip::block">
+      <a href="../../IP/Block.html">Block</a>
+      
+        <ul>
+  
+  <li class=" current" data-id="github.com/chris-huxtable/ip_address.cr/IP/Block/IPv4" data-name="ip::block::ipv4">
+      <a href="../../IP/Block/IPv4.html">IPv4</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/chris-huxtable/ip_address.cr/IP/Block/IPv6" data-name="ip::block::ipv6">
+      <a href="../../IP/Block/IPv6.html">IPv6</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">struct</span> IP::Block::IPv4
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../IP/Block/IPv4.html">IP::Block::IPv4</a></li><li class="superclass"><a href="../../IP/Block.html">IP::Block</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>Defined in:</h2>
+  
+    
+      <a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/block/ipv4.cr#L16" target="_blank">ip/block/ipv4.cr</a>
+    
+    <br/>
+  
+
+
+
+
+
+  <h2>Constructors</h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#loopback%3Aself-class-method" class="signature"><strong>.loopback</strong> : self</a>
+        
+          <div class="summary"><p>Constructs a <code><a href="../../IP/Block.html">IP::Block</a>:<a href="../../IP/Block/IPv4.html">IPv4</a></code> representing the IPv4 loopback block.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%28address%3AIP%3A%3AAddress%3A%3AIPv4%2Cblock%3AInt%29%3Aself-class-method" class="signature"><strong>.new</strong>(address : IP::Address::IPv4, block : Int) : self</a>
+        
+          <div class="summary"><p>Constructs a new <code><a href="../../IP/Block/IPv4.html">IP::Block::IPv4</a></code> from an address and the block size, [0-32].</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%28string%3AString%29%3Aself-class-method" class="signature"><strong>.new</strong>(string : String) : self</a>
+        
+          <div class="summary"><p>Constructs a new <code><a href="../../IP/Block/IPv4.html">IP::Block::IPv4</a></code> by interpreting the contents of a given <code>String</code>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%3F%28address%3AIP%3A%3AAddress%3A%3AIPv4%2Cblock%3AInt%29%3Aself%3F-class-method" class="signature"><strong>.new?</strong>(address : IP::Address::IPv4, block : Int) : self?</a>
+        
+          <div class="summary"><p>Constructs a new <code><a href="../../IP/Block/IPv4.html">IP::Block::IPv4</a></code> from an address and the block size, [0-32].</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%3F%28string%3AString%29%3Aself%3F-class-method" class="signature"><strong>.new?</strong>(string : String) : self?</a>
+        
+          <div class="summary"><p>Constructs a new <code><a href="../../IP/Block/IPv4.html">IP::Block::IPv4</a></code> by interpreting the contents of a given <code>String</code>.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+  <h2>Instance Method Summary</h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#address%3AIP%3A%3AAddress%3A%3AIPv4-instance-method" class="signature"><strong>#address</strong> : IP::Address::IPv4</a>
+        
+          <div class="summary"><p>Returns the address component of the block which is also the first address.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#block%3AUInt8-instance-method" class="signature"><strong>#block</strong> : UInt8</a>
+        
+          <div class="summary"><p>Returns 'block' size in the form of 2^x, x being the 'size'.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#ipv4%3F%3ABool-instance-method" class="signature"><strong>#ipv4?</strong> : Bool</a>
+        
+          <div class="summary"><p>Informs if the block is IPv4 or not.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#size%3AUInt32-instance-method" class="signature"><strong>#size</strong> : UInt32</a>
+        
+          <div class="summary"><p>Returns the size of the block in terms of number of addresses.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+  <h3>Instance methods inherited from struct <code><a href="../../IP/Block.html">IP::Block</a></code></h3>
+  
+  
+    <a href="../../IP/Block.html#%3C%28other%3AIP%3A%3ABlock%29-instance-method" class="tooltip">
+      <span><(other : IP::Block)</span>
+    <</a>, 
+    
+  
+    <a href="../../IP/Block.html#%3C%3D%28other%3AIP%3A%3ABlock%29-instance-method" class="tooltip">
+      <span><=(other : IP::Block)</span>
+    <=</a>, 
+    
+  
+    <a href="../../IP/Block.html#%28other%3AIP%3A%3ABlock%29%3AInt-instance-method" class="tooltip">
+      <span><=>(other : IP::Block) : Int<br/><=>(other : IP::Address) : Int</span>
+    <=></a>, 
+    
+  
+    <a href="../../IP/Block.html#%3D%3D%28other%3AIP%3A%3ABlock%29-instance-method" class="tooltip">
+      <span>==(other : IP::Block)</span>
+    ==</a>, 
+    
+  
+    <a href="../../IP/Block.html#%3E%28other%3AIP%3A%3ABlock%29-instance-method" class="tooltip">
+      <span>>(other : IP::Block)</span>
+    ></a>, 
+    
+  
+    <a href="../../IP/Block.html#%3E%3D%28other%3AIP%3A%3ABlock%29-instance-method" class="tooltip">
+      <span>>=(other : IP::Block)</span>
+    >=</a>, 
+    
+  
+    <a href="../../IP/Block.html#address-instance-method" class="tooltip">
+      <span>address</span>
+    address</a>, 
+    
+  
+    <a href="../../IP/Block.html#adjacent%3F%28other%3AIP%3A%3AAddress%29%3ABool-instance-method" class="tooltip">
+      <span>adjacent?(other : IP::Address) : Bool<br/>adjacent?(other : IP::Block) : Bool</span>
+    adjacent?</a>, 
+    
+  
+    <a href="../../IP/Block.html#block-instance-method" class="tooltip">
+      <span>block</span>
+    block</a>, 
+    
+  
+    <a href="../../IP/Block.html#covers%3F%28other%3AIP%3A%3AAddress%29%3ABool-instance-method" class="tooltip">
+      <span>covers?(other : IP::Address) : Bool<br/>covers?(other : IP::Block) : Bool</span>
+    covers?</a>, 
+    
+  
+    <a href="../../IP/Block.html#each%28%26block%3AIP%3A%3AAddress-%3ENil%29%3ANil-instance-method" class="tooltip">
+      <span>each(&block : IP::Address -> Nil) : Nil</span>
+    each</a>, 
+    
+  
+    <a href="../../IP/Block.html#first%3AIP%3A%3AAddress-instance-method" class="tooltip">
+      <span>first : IP::Address</span>
+    first</a>, 
+    
+  
+    <a href="../../IP/Block.html#hash%28hasher%29-instance-method" class="tooltip">
+      <span>hash(hasher)</span>
+    hash</a>, 
+    
+  
+    <a href="../../IP/Block.html#includes%3F%28other%3AIP%3A%3AAddress%29%3ABool-instance-method" class="tooltip">
+      <span>includes?(other : IP::Address) : Bool</span>
+    includes?</a>, 
+    
+  
+    <a href="../../IP/Block.html#inspect%28io%3AIO%29%3ANil-instance-method" class="tooltip">
+      <span>inspect(io : IO) : Nil</span>
+    inspect</a>, 
+    
+  
+    <a href="../../IP/Block.html#intersects%3F%28other%3AIP%3A%3ABlock%29%3ABool-instance-method" class="tooltip">
+      <span>intersects?(other : IP::Block) : Bool<br/>intersects?(other : IP::Address) : Bool</span>
+    intersects?</a>, 
+    
+  
+    <a href="../../IP/Block.html#ipv4%3F%3ABool-instance-method" class="tooltip">
+      <span>ipv4? : Bool</span>
+    ipv4?</a>, 
+    
+  
+    <a href="../../IP/Block.html#ipv6%3F%3ABool-instance-method" class="tooltip">
+      <span>ipv6? : Bool</span>
+    ipv6?</a>, 
+    
+  
+    <a href="../../IP/Block.html#last%3AIP%3A%3AAddress-instance-method" class="tooltip">
+      <span>last : IP::Address</span>
+    last</a>, 
+    
+  
+    <a href="../../IP/Block.html#mask%3AIP%3A%3AAddress-instance-method" class="tooltip">
+      <span>mask : IP::Address</span>
+    mask</a>, 
+    
+  
+    <a href="../../IP/Block.html#single_address%3F%3ABool-instance-method" class="tooltip">
+      <span>single_address? : Bool</span>
+    single_address?</a>, 
+    
+  
+    <a href="../../IP/Block.html#size-instance-method" class="tooltip">
+      <span>size</span>
+    size</a>, 
+    
+  
+    <a href="../../IP/Block.html#to_s%28io%3AIO%29%3ANil-instance-method" class="tooltip">
+      <span>to_s(io : IO) : Nil</span>
+    to_s</a>
+    
+  
+
+
+    
+
+  <h3>Constructor methods inherited from struct <code><a href="../../IP/Block.html">IP::Block</a></code></h3>
+  
+  
+    <a href="../../IP/Block.html#%5B%5D%28string%3AString%29%3Aself-class-method" class="tooltip">
+      <span>[](string : String) : self</span>
+    []</a>, 
+    
+  
+    <a href="../../IP/Block.html#%5B%5D%3F%28string%3AString%29%3Aself%3F-class-method" class="tooltip">
+      <span>[]?(string : String) : self?</span>
+    []?</a>, 
+    
+  
+    <a href="../../IP/Block.html#ipv4%28string%3AString%29%3Aself-class-method" class="tooltip">
+      <span>ipv4(string : String) : self</span>
+    ipv4</a>, 
+    
+  
+    <a href="../../IP/Block.html#ipv4%3F%28string%3AString%29%3Aself%3F-class-method" class="tooltip">
+      <span>ipv4?(string : String) : self?</span>
+    ipv4?</a>, 
+    
+  
+    <a href="../../IP/Block.html#ipv6%28string%3AString%29%3Aself-class-method" class="tooltip">
+      <span>ipv6(string : String) : self</span>
+    ipv6</a>, 
+    
+  
+    <a href="../../IP/Block.html#ipv6%3F%28string%3AString%29%3Aself%3F-class-method" class="tooltip">
+      <span>ipv6?(string : String) : self?</span>
+    ipv6?</a>, 
+    
+  
+    <a href="../../IP/Block.html#loopback_ipv4%3Aself-class-method" class="tooltip">
+      <span>loopback_ipv4 : self</span>
+    loopback_ipv4</a>, 
+    
+  
+    <a href="../../IP/Block.html#loopback_ipv6%3Aself-class-method" class="tooltip">
+      <span>loopback_ipv6 : self</span>
+    loopback_ipv6</a>, 
+    
+  
+    <a href="../../IP/Block.html#new%28address%3AIP%3A%3AAddress%2Cblock%3AInt%29%3Aself%3F-class-method" class="tooltip">
+      <span>new(address : IP::Address, block : Int) : self?<br/>new(string : String) : self</span>
+    new</a>, 
+    
+  
+    <a href="../../IP/Block.html#new%3F%28address%3AIP%3A%3AAddress%2Cblock%3AInt%29%3Aself%3F-class-method" class="tooltip">
+      <span>new?(address : IP::Address, block : Int) : self?<br/>new?(string : String) : self?</span>
+    new?</a>
+    
+  
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>Constructor Detail</h2>
+  
+    <div class="entry-detail" id="loopback:self-class-method">
+      <div class="signature">
+        
+        def self.<strong>loopback</strong> : self
+
+        <a class="method-permalink" href="#loopback%3Aself-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Constructs a <code><a href="../../IP/Block.html">IP::Block</a>:<a href="../../IP/Block/IPv4.html">IPv4</a></code> representing the IPv4 loopback block.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/block/ipv4.cr#L77" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(address:IP::Address::IPv4,block:Int):self-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(address : <a href="../../IP/Address/IPv4.html">IP::Address::IPv4</a>, block : Int) : self
+
+        <a class="method-permalink" href="#new%28address%3AIP%3A%3AAddress%3A%3AIPv4%2Cblock%3AInt%29%3Aself-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Constructs a new <code><a href="../../IP/Block/IPv4.html">IP::Block::IPv4</a></code> from an address and the block size, [0-32].</p>
+
+<p>Raises: <code>MalformedError</code> when the input is malformed.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/block/ipv4.cr#L59" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(string:String):self-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(string : String) : self
+
+        <a class="method-permalink" href="#new%28string%3AString%29%3Aself-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Constructs a new <code><a href="../../IP/Block/IPv4.html">IP::Block::IPv4</a></code> by interpreting the contents of a given <code>String</code>.</p>
+
+<p>Expects a definition in CIDR notation similar to [0-255].[0-255].[0-255].[0-255]/[0-32].</p>
+
+<p>Raises: <code>MalformedError</code> when the input is malformed.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/block/ipv4.cr#L30" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new?(address:IP::Address::IPv4,block:Int):self?-class-method">
+      <div class="signature">
+        
+        def self.<strong>new?</strong>(address : <a href="../../IP/Address/IPv4.html">IP::Address::IPv4</a>, block : Int) : self?
+
+        <a class="method-permalink" href="#new%3F%28address%3AIP%3A%3AAddress%3A%3AIPv4%2Cblock%3AInt%29%3Aself%3F-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Constructs a new <code><a href="../../IP/Block/IPv4.html">IP::Block::IPv4</a></code> from an address and the block size, [0-32].</p>
+
+<p>Returns <code>nil</code> when the input is malformed.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/block/ipv4.cr#L66" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new?(string:String):self?-class-method">
+      <div class="signature">
+        
+        def self.<strong>new?</strong>(string : String) : self?
+
+        <a class="method-permalink" href="#new%3F%28string%3AString%29%3Aself%3F-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Constructs a new <code><a href="../../IP/Block/IPv4.html">IP::Block::IPv4</a></code> by interpreting the contents of a given <code>String</code>.</p>
+
+<p>Expects a definition in CIDR notation similar to [0-255].[0-255].[0-255].[0-255]/[0-32]</p>
+
+<p>Returns <code>nil</code> when the input is malformed.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/block/ipv4.cr#L39" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+
+  <h2>Instance Method Detail</h2>
+  
+    <div class="entry-detail" id="address:IP::Address::IPv4-instance-method">
+      <div class="signature">
+        
+        def <strong>address</strong> : <a href="../../IP/Address/IPv4.html">IP::Address::IPv4</a>
+
+        <a class="method-permalink" href="#address%3AIP%3A%3AAddress%3A%3AIPv4-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Returns the address component of the block which is also the first address.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/block/ipv4.cr#L82" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="block:UInt8-instance-method">
+      <div class="signature">
+        
+        def <strong>block</strong> : UInt8
+
+        <a class="method-permalink" href="#block%3AUInt8-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Returns 'block' size in the form of 2^x, x being the 'size'.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/block/ipv4.cr#L85" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="ipv4?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>ipv4?</strong> : Bool
+
+        <a class="method-permalink" href="#ipv4%3F%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Informs if the block is IPv4 or not.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/block/ipv4.cr#L91" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="size:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>size</strong> : UInt32
+
+        <a class="method-permalink" href="#size%3AUInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Returns the size of the block in terms of number of addresses.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/block/ipv4.cr#L88" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>

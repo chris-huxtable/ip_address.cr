@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 0.25.1">
+
+
+<link href="../../css/style.css" rel="stylesheet" type="text/css">
+
+<script type="text/javascript" src="../../js/doc.js"></script>
+<script type="text/javascript">
+  CrystalDoc.base_path = "../../";
+</script>
+
+  <meta id="repository-name" content="github.com/chris-huxtable/ip_address.cr">
+  <title>IP::Address::IPv6 - github.com/chris-huxtable/ip_address.cr</title>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false">
+    </div>
+
+    <div class="repository-links">
+      <a href="../../index.html">README</a>
+    </div>
+  </div>
+
+  <div class="search-results" class="hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="github.com/chris-huxtable/ip_address.cr/IP" data-name="ip">
+      <a href="../../IP.html">IP</a>
+      
+        <ul>
+  
+  <li class="parent open current" data-id="github.com/chris-huxtable/ip_address.cr/IP/Address" data-name="ip::address">
+      <a href="../../IP/Address.html">Address</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="github.com/chris-huxtable/ip_address.cr/IP/Address/IPv4" data-name="ip::address::ipv4">
+      <a href="../../IP/Address/IPv4.html">IPv4</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/chris-huxtable/ip_address.cr/IP/Address/IPv4/Octet" data-name="ip::address::ipv4::octet">
+      <a href="../../IP/Address/IPv4/Octet.html">Octet</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/chris-huxtable/ip_address.cr/IP/Address/IPv4/Octets" data-name="ip::address::ipv4::octets">
+      <a href="../../IP/Address/IPv4/Octets.html">Octets</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/chris-huxtable/ip_address.cr/IP/Address/IPv4/Value" data-name="ip::address::ipv4::value">
+      <a href="../../IP/Address/IPv4/Value.html">Value</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent open current" data-id="github.com/chris-huxtable/ip_address.cr/IP/Address/IPv6" data-name="ip::address::ipv6">
+      <a href="../../IP/Address/IPv6.html">IPv6</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/chris-huxtable/ip_address.cr/IP/Address/IPv6/Hextet" data-name="ip::address::ipv6::hextet">
+      <a href="../../IP/Address/IPv6/Hextet.html">Hextet</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/chris-huxtable/ip_address.cr/IP/Address/IPv6/Hextets" data-name="ip::address::ipv6::hextets">
+      <a href="../../IP/Address/IPv6/Hextets.html">Hextets</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/chris-huxtable/ip_address.cr/IP/Address/IPv6/Value" data-name="ip::address::ipv6::value">
+      <a href="../../IP/Address/IPv6/Value.html">Value</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/chris-huxtable/ip_address.cr/IP/Block" data-name="ip::block">
+      <a href="../../IP/Block.html">Block</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/chris-huxtable/ip_address.cr/IP/Block/IPv4" data-name="ip::block::ipv4">
+      <a href="../../IP/Block/IPv4.html">IPv4</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/chris-huxtable/ip_address.cr/IP/Block/IPv6" data-name="ip::block::ipv6">
+      <a href="../../IP/Block/IPv6.html">IPv6</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">struct</span> IP::Address::IPv6
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../IP/Address/IPv6.html">IP::Address::IPv6</a></li><li class="superclass"><a href="../../IP/Address.html">IP::Address</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>Defined in:</h2>
+  
+    
+      <a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/address/ipv6.cr#L19" target="_blank">ip/address/ipv6.cr</a>
+    
+    <br/>
+  
+
+
+
+  
+    <h2>Constant Summary</h2>
+  
+  <dl>
+    
+      <dt class="entry-const" id="ADDRESS_MAX">
+        <strong>ADDRESS_MAX</strong> = <code><span class="o">~</span><span class="n">0_u128</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="ADDRESS_WIDTH">
+        <strong>ADDRESS_WIDTH</strong> = <code><span class="n">128_u8</span></code>
+      </dt>
+      
+      <dd class="entry-const-doc">
+        <p>0xFFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_u128</p>
+      </dd>
+      
+    
+  </dl>
+
+
+
+  <h2>Constructors</h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28value%3AValue%29-class-method" class="signature"><strong>.new</strong>(value : Value)</a>
+        
+          <div class="summary"><p>Creates a new <code><a href="../../IP/Address/IPv6.html">IP::Address::IPv6</a></code> from a <code>{{ Value.id }}</code> value.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%28string%3AString%29%3Aself-class-method" class="signature"><strong>.new</strong>(string : String) : self</a>
+        
+          <div class="summary"><p>Constructs a new <code><a href="../../IP/Address/IPv6.html">IP::Address::IPv6</a></code> from the contents of a <code>String</code>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%28hextets%3AHextets%29-class-method" class="signature"><strong>.new</strong>(hextets : Hextets)</a>
+        
+          <div class="summary"><p>Constructs a new <code><a href="../../IP/Address/IPv6.html">IP::Address::IPv6</a></code> from a <code>Tuple</code> of 8 <code>UInt16</code>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%28sockaddr%3A%3A%3APointer%28LibC%3A%3ASockaddrIn6%29%29%3Aself-class-method" class="signature"><strong>.new</strong>(sockaddr : ::Pointer(LibC::SockaddrIn6)) : self</a>
+        
+          <div class="summary"><p>Constructs a new <code><a href="../../IP/Address/IPv6.html">IP::Address::IPv6</a></code> from a <code>SockaddrIn6*</code>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%28value%3AInt%29%3Aself-class-method" class="signature"><strong>.new</strong>(value : Int) : self</a>
+        
+          <div class="summary"><p>Constructs a new <code><a href="../../IP/Address/IPv6.html">IP::Address::IPv6</a></code> from an <code>Int</code>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%3F%28string%3AString%29%3Aself%3F-class-method" class="signature"><strong>.new?</strong>(string : String) : self?</a>
+        
+          <div class="summary"><p>Constructs a new <code><a href="../../IP/Address/IPv6.html">IP::Address::IPv6</a></code> from the contents of a <code>String</code>.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+  <h2>Instance Method Summary</h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#%5B%5D%28index%3AInt%29%3AHextet-instance-method" class="signature"><strong>#[]</strong>(index : Int) : Hextet</a>
+        
+          <div class="summary"><p>Returns the requested group from the address.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#hextets%3AHextets-instance-method" class="signature"><strong>#hextets</strong> : Hextets</a>
+        
+          <div class="summary"><p>Returns a <code>Tuple</code> of 8 <code>UInt16</code> which represent the addresses octets.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#loopback%3F%3ABool-instance-method" class="signature"><strong>#loopback?</strong> : Bool</a>
+        
+          <div class="summary"><p>Informs if the address is in the loopback address space or not.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#max_value%3AValue-instance-method" class="signature"><strong>#max_value</strong> : Value</a>
+        
+          <div class="summary"><p>The maximum address of this type.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#to_s%28upcase%3ABool%2Cminify%3ABool%2Cio%3AIO%29%3ANil-instance-method" class="signature"><strong>#to_s</strong>(upcase : Bool, minify : Bool, io : IO) : Nil</a>
+        
+          <div class="summary"><p>Appends the presentation representation of the address to the given <code>IO</code>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#to_s%28upcase%3ABool%3Dfalse%2Cminify%3ABool%3Dtrue%29%3AString-instance-method" class="signature"><strong>#to_s</strong>(upcase : Bool = <span class="n">false</span>, minify : Bool = <span class="n">true</span>) : String</a>
+        
+          <div class="summary"><p>Returns the presentation representation of the address as a <code>String</code>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#to_sockaddr%28port%3AUInt16%3D0_u16%29%3A%3A%3APointer%28LibC%3A%3ASockaddr%29-instance-method" class="signature"><strong>#to_sockaddr</strong>(port : UInt16 = <span class="n">0_u16</span>) : ::Pointer(LibC::Sockaddr)</a>
+        
+          <div class="summary"><p>Produces the c <code>sockaddr_in6</code> struct required by <code>bind</code>, <code>connect</code>, <code>sendto</code>, and <code>sendmsg</code>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#value%3AValue-instance-method" class="signature"><strong>#value</strong> : Value</a>
+        
+          <div class="summary"><p>The internally stored value of the address.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#value_network%3AStaticArray%28LibC%3A%3AUInt16T%2C8%29-instance-method" class="signature"><strong>#value_network</strong> : StaticArray(LibC::UInt16T, 8)</a>
+        
+          <div class="summary"><p>The internally stored value of the address in network byte order.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#width%3AUInt8-instance-method" class="signature"><strong>#width</strong> : UInt8</a>
+        
+          <div class="summary"><p>The width of the address type.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+  <h3>Instance methods inherited from struct <code><a href="../../IP/Address.html">IP::Address</a></code></h3>
+  
+  
+    <a href="../../IP/Address.html#%2B%28other%3AInt%29%3Aself-instance-method" class="tooltip">
+      <span>+(other : Int) : self</span>
+    +</a>, 
+    
+  
+    <a href="../../IP/Address.html#-%28other%3AInt%29%3Aself-instance-method" class="tooltip">
+      <span>-(other : Int) : self</span>
+    -</a>, 
+    
+  
+    <a href="../../IP/Address.html#%28other%3AIP%3A%3AAddress%29%3AInt-instance-method" class="tooltip">
+      <span><=>(other : IP::Address) : Int<br/><=>(other : IP::Block) : Int</span>
+    <=></a>, 
+    
+  
+    <a href="../../IP/Address.html#%5B%5D%28index%3AInt%29-instance-method" class="tooltip">
+      <span>[](index : Int)</span>
+    []</a>, 
+    
+  
+    <a href="../../IP/Address.html#adjacent%3F%28other%3AIP%3A%3ABlock%29-instance-method" class="tooltip">
+      <span>adjacent?(other : IP::Block)<br/>adjacent?(other : IP::Address)</span>
+    adjacent?</a>, 
+    
+  
+    <a href="../../IP/Address.html#family%3ASocket%3A%3AFamily-instance-method" class="tooltip">
+      <span>family : Socket::Family</span>
+    family</a>, 
+    
+  
+    <a href="../../IP/Address.html#hash%28hasher%29-instance-method" class="tooltip">
+      <span>hash(hasher)</span>
+    hash</a>, 
+    
+  
+    <a href="../../IP/Address.html#inspect%28io%3AIO%29%3ANil-instance-method" class="tooltip">
+      <span>inspect(io : IO) : Nil</span>
+    inspect</a>, 
+    
+  
+    <a href="../../IP/Address.html#ipv4%3F%3ABool-instance-method" class="tooltip">
+      <span>ipv4? : Bool</span>
+    ipv4?</a>, 
+    
+  
+    <a href="../../IP/Address.html#ipv6%3F%3ABool-instance-method" class="tooltip">
+      <span>ipv6? : Bool</span>
+    ipv6?</a>, 
+    
+  
+    <a href="../../IP/Address.html#loopback%3F%3ABool-instance-method" class="tooltip">
+      <span>loopback? : Bool</span>
+    loopback?</a>, 
+    
+  
+    <a href="../../IP/Address.html#max_value-instance-method" class="tooltip">
+      <span>max_value</span>
+    max_value</a>, 
+    
+  
+    <a href="../../IP/Address.html#to_sockaddr-instance-method" class="tooltip">
+      <span>to_sockaddr</span>
+    to_sockaddr</a>, 
+    
+  
+    <a href="../../IP/Address.html#value-instance-method" class="tooltip">
+      <span>value</span>
+    value</a>, 
+    
+  
+    <a href="../../IP/Address.html#value_network-instance-method" class="tooltip">
+      <span>value_network</span>
+    value_network</a>, 
+    
+  
+    <a href="../../IP/Address.html#width-instance-method" class="tooltip">
+      <span>width</span>
+    width</a>
+    
+  
+
+
+    
+
+  <h3>Constructor methods inherited from struct <code><a href="../../IP/Address.html">IP::Address</a></code></h3>
+  
+  
+    <a href="../../IP/Address.html#%5B%5D%28string%3AString%29%3Aself-class-method" class="tooltip">
+      <span>[](string : String) : self</span>
+    []</a>, 
+    
+  
+    <a href="../../IP/Address.html#%5B%5D%3F%28string%3AString%29%3Aself%3F-class-method" class="tooltip">
+      <span>[]?(string : String) : self?</span>
+    []?</a>, 
+    
+  
+    <a href="../../IP/Address.html#new%28string%3AString%29%3Aself-class-method" class="tooltip">
+      <span>new(string : String) : self<br/>new(sockaddr : ::Pointer(LibC::Sockaddr)) : self</span>
+    new</a>, 
+    
+  
+    <a href="../../IP/Address.html#new%3F%28string%3AString%29%3Aself%3F-class-method" class="tooltip">
+      <span>new?(string : String) : self?</span>
+    new?</a>
+    
+  
+
+
+    
+
+  <h3>Class methods inherited from struct <code><a href="../../IP/Address.html">IP::Address</a></code></h3>
+  
+  
+    <a href="../../IP/Address.html#ipv4%28string%3AString%29-class-method" class="tooltip">
+      <span>ipv4(string : String)</span>
+    ipv4</a>, 
+    
+  
+    <a href="../../IP/Address.html#ipv4%3F%28string%3AString%29-class-method" class="tooltip">
+      <span>ipv4?(string : String)</span>
+    ipv4?</a>, 
+    
+  
+    <a href="../../IP/Address.html#ipv6%28string%3AString%29-class-method" class="tooltip">
+      <span>ipv6(string : String)</span>
+    ipv6</a>, 
+    
+  
+    <a href="../../IP/Address.html#ipv6%3F%28string%3AString%29-class-method" class="tooltip">
+      <span>ipv6?(string : String)</span>
+    ipv6?</a>
+    
+  
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>Constructor Detail</h2>
+  
+    <div class="entry-detail" id="new(value:Value)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(value : <a href="../../IP/Address/IPv6/Value.html">Value</a>)
+
+        <a class="method-permalink" href="#new%28value%3AValue%29-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Creates a new <code><a href="../../IP/Address/IPv6.html">IP::Address::IPv6</a></code> from a <code>{{ Value.id }}</code> value.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/address/ipv6.cr#L29" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(string:String):self-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(string : String) : self
+
+        <a class="method-permalink" href="#new%28string%3AString%29%3Aself-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Constructs a new <code><a href="../../IP/Address/IPv6.html">IP::Address::IPv6</a></code> from the contents of a <code>String</code>. Expects an
+address in the standard presentation form XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX
+or in the compressed from similar to XXXX:XXXX::XXXX:XXXX:XXXX.</p>
+
+<p>Raises: <code>MalformedError</code> when the input is malformed.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/address/ipv6.cr#L37" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(hextets:Hextets)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(hextets : <a href="../../IP/Address/IPv6/Hextets.html">Hextets</a>)
+
+        <a class="method-permalink" href="#new%28hextets%3AHextets%29-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Constructs a new <code><a href="../../IP/Address/IPv6.html">IP::Address::IPv6</a></code> from a <code>Tuple</code> of 8 <code>UInt16</code>.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/address/ipv6.cr#L54" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(sockaddr:::Pointer(LibC::SockaddrIn6)):self-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(sockaddr : ::Pointer(LibC::SockaddrIn6)) : self
+
+        <a class="method-permalink" href="#new%28sockaddr%3A%3A%3APointer%28LibC%3A%3ASockaddrIn6%29%29%3Aself-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Constructs a new <code><a href="../../IP/Address/IPv6.html">IP::Address::IPv6</a></code> from a <code>SockaddrIn6*</code>.</p>
+
+<p><span class="flag orange">TODO</span>  Significant testing nessissary.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/address/ipv6.cr#L68" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(value:Int):self-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(value : Int) : self
+
+        <a class="method-permalink" href="#new%28value%3AInt%29%3Aself-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Constructs a new <code><a href="../../IP/Address/IPv6.html">IP::Address::IPv6</a></code> from an <code>Int</code>.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/address/ipv6.cr#L83" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new?(string:String):self?-class-method">
+      <div class="signature">
+        
+        def self.<strong>new?</strong>(string : String) : self?
+
+        <a class="method-permalink" href="#new%3F%28string%3AString%29%3Aself%3F-class-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Constructs a new <code><a href="../../IP/Address/IPv6.html">IP::Address::IPv6</a></code> from the contents of a <code>String</code>. Expects an
+address in the standard presentation form XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX
+or in the compressed from similar to XXXX:XXXX::XXXX:XXXX:XXXX.</p>
+
+<p>Returns <code>nil</code> when the input is malformed.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/address/ipv6.cr#L47" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+
+  <h2>Instance Method Detail</h2>
+  
+    <div class="entry-detail" id="[](index:Int):Hextet-instance-method">
+      <div class="signature">
+        
+        def <strong>[]</strong>(index : Int) : <a href="../../IP/Address/IPv6/Hextet.html">Hextet</a>
+
+        <a class="method-permalink" href="#%5B%5D%28index%3AInt%29%3AHextet-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Returns the requested group from the address.</p>
+
+<p>Raises <code>OutOfBoundsError</code> if the requested group is not [0..7].</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/address/ipv6.cr#L117" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="hextets:Hextets-instance-method">
+      <div class="signature">
+        
+        def <strong>hextets</strong> : <a href="../../IP/Address/IPv6/Hextets.html">Hextets</a>
+
+        <a class="method-permalink" href="#hextets%3AHextets-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Returns a <code>Tuple</code> of 8 <code>UInt16</code> which represent the addresses octets.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/address/ipv6.cr#L127" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="loopback?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>loopback?</strong> : Bool
+
+        <a class="method-permalink" href="#loopback%3F%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Informs if the address is in the loopback address space or not.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/address/ipv6.cr#L110" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="max_value:Value-instance-method">
+      <div class="signature">
+        
+        def <strong>max_value</strong> : <a href="../../IP/Address/IPv6/Value.html">Value</a>
+
+        <a class="method-permalink" href="#max_value%3AValue-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>The maximum address of this type.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/address/ipv6.cr#L105" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="to_s(upcase:Bool,minify:Bool,io:IO):Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>to_s</strong>(upcase : Bool, minify : Bool, io : IO) : Nil
+
+        <a class="method-permalink" href="#to_s%28upcase%3ABool%2Cminify%3ABool%2Cio%3AIO%29%3ANil-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Appends the presentation representation of the address to the given <code>IO</code>.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/address/ipv6.cr#L137" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="to_s(upcase:Bool=false,minify:Bool=true):String-instance-method">
+      <div class="signature">
+        
+        def <strong>to_s</strong>(upcase : Bool = <span class="n">false</span>, minify : Bool = <span class="n">true</span>) : String
+
+        <a class="method-permalink" href="#to_s%28upcase%3ABool%3Dfalse%2Cminify%3ABool%3Dtrue%29%3AString-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Returns the presentation representation of the address as a <code>String</code>.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/address/ipv6.cr#L132" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="to_sockaddr(port:UInt16=0_u16):::Pointer(LibC::Sockaddr)-instance-method">
+      <div class="signature">
+        
+        def <strong>to_sockaddr</strong>(port : UInt16 = <span class="n">0_u16</span>) : ::Pointer(LibC::Sockaddr)
+
+        <a class="method-permalink" href="#to_sockaddr%28port%3AUInt16%3D0_u16%29%3A%3A%3APointer%28LibC%3A%3ASockaddr%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>Produces the c <code>sockaddr_in6</code> struct required by <code>bind</code>, <code>connect</code>, <code>sendto</code>, and <code>sendmsg</code>.</p>
+
+<p><strong>Note:</strong> Unix Network Programming: Volume 1, 3rd Edition, p.71-72</p>
+
+<ul><li>sin6_len: default size of this struct is 28 bytes.</li><li>sin_zero: is unused.</li></ul>
+
+<p><span class="flag orange">TODO</span>  Set correct scope id</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/address/ipv6.cr#L211" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="value:Value-instance-method">
+      <div class="signature">
+        
+        def <strong>value</strong> : <a href="../../IP/Address/IPv6/Value.html">Value</a>
+
+        <a class="method-permalink" href="#value%3AValue-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>The internally stored value of the address.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/address/ipv6.cr#L90" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="value_network:StaticArray(LibC::UInt16T,8)-instance-method">
+      <div class="signature">
+        
+        def <strong>value_network</strong> : StaticArray(LibC::UInt16T, 8)
+
+        <a class="method-permalink" href="#value_network%3AStaticArray%28LibC%3A%3AUInt16T%2C8%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>The internally stored value of the address in network byte order.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/address/ipv6.cr#L93" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="width:UInt8-instance-method">
+      <div class="signature">
+        
+        def <strong>width</strong> : UInt8
+
+        <a class="method-permalink" href="#width%3AUInt8-instance-method">#</a>
+      </div>
+      
+        <div class="doc"><p>The width of the address type.</p></div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/chris-huxtable/ip_address.cr/blob/12861ed3f6a2cfaf5d020c837aa9c3f2457b9b59/src/ip/address/ipv6.cr#L100" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>
